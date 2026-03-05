@@ -1,0 +1,114 @@
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--off-white);
+  padding: 20px;
+}
+
+.admin-login__form {
+  background: var(--white);
+  padding: 48px 40px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-login__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--purple-dark);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.admin-login__error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  text-align: center;
+  background: #ffeaea;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.admin-login__google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--white);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  transition: all var(--transition);
+}
+
+.admin-login__google:hover {
+  background: #f8f8f8;
+  border-color: #bbb;
+}
+
+.admin-login__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.admin-login__divider::before,
+.admin-login__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.admin-login__email-toggle {
+  padding: 12px;
+  color: var(--purple-main);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color var(--transition);
+}
+
+.admin-login__email-toggle:hover {
+  color: var(--purple-dark);
+}
+
+.admin-login__form input {
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  transition: border-color var(--transition);
+}
+
+.admin-login__form input:focus {
+  outline: none;
+  border-color: var(--purple-main);
+}
+
+.admin-login__form button[type="submit"] {
+  padding: 14px;
+  background: var(--purple-dark);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: background var(--transition);
+}
+
+.admin-login__form button[type="submit"]:hover {
+  background: var(--purple-main);
+}

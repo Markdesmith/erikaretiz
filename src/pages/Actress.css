@@ -1,0 +1,155 @@
+.actress {
+  min-height: 100vh;
+  background: var(--off-white);
+}
+
+.actress__header {
+  text-align: center;
+  padding: 40px 20px 30px;
+  position: relative;
+}
+
+.actress__back {
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  font-size: 0.95rem;
+  color: var(--purple-main);
+  transition: color var(--transition);
+}
+
+.actress__back:hover {
+  color: var(--purple-dark);
+}
+
+.actress__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--purple-dark);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.actress__page-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: 0.1em;
+}
+
+.actress__content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Portfolio sections */
+.portfolio-section__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--purple-dark);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.portfolio-contact {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.portfolio-contact a {
+  color: var(--purple-main);
+  text-decoration: underline;
+}
+
+/* Demo reel */
+.demo-reel__wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.demo-reel__wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Photo gallery */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.photo-gallery__item {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 1;
+  transition: transform var(--transition);
+}
+
+.photo-gallery__item:hover {
+  transform: scale(1.02);
+}
+
+.photo-gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox */
+.photo-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.photo-lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.photo-lightbox__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 2rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .photo-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-gallery {
+    grid-template-columns: 1fr;
+  }
+}

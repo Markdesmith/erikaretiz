@@ -1,0 +1,251 @@
+.admin-page {
+  min-height: 100vh;
+  background: var(--off-white);
+}
+
+.admin-page__content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.admin-page__title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--purple-dark);
+  margin-bottom: 24px;
+}
+
+/* Admin card */
+.admin-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.admin-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--purple-dark);
+  margin-bottom: 16px;
+}
+
+.admin-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-card__form label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-card__form input, .admin-card__form textarea {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+}
+
+.admin-card__form input:focus, .admin-card__form textarea:focus {
+  outline: none;
+  border-color: var(--purple-main);
+}
+
+.admin-card__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.admin-card__preview p {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition);
+  background: var(--purple-faint);
+  color: var(--purple-dark);
+}
+
+.btn:hover {
+  background: var(--purple-light);
+  color: var(--white);
+}
+
+.btn--sm {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.btn--save {
+  background: var(--purple-dark);
+  color: var(--white);
+}
+
+.btn--save:hover {
+  background: var(--purple-main);
+}
+
+.btn--cancel {
+  background: #eee;
+  color: #666;
+}
+
+.btn--cancel:hover {
+  background: #ddd;
+}
+
+.btn--danger {
+  background: #fee;
+  color: #d32f2f;
+}
+
+.btn--danger:hover {
+  background: #d32f2f;
+  color: white;
+}
+
+.btn--add {
+  padding: 8px 16px;
+  color: var(--purple-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn--add:hover {
+  color: var(--purple-dark);
+}
+
+.btn--primary {
+  background: var(--purple-dark);
+  color: var(--white);
+  padding: 14px;
+  font-size: 1rem;
+}
+
+.btn--primary:hover {
+  background: var(--purple-main);
+}
+
+.btn--full {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Section editor */
+.section-editor {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.section-editor__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-editor__drag {
+  cursor: grab;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.section-editor__name {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.section-editor__name:hover {
+  color: var(--purple-main);
+}
+
+.section-editor__name-edit {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.section-editor__name-edit input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.section-editor__links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Link editor */
+.link-editor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--off-white);
+  border-radius: var(--radius-sm);
+}
+
+.link-editor--editing {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px;
+}
+
+.link-editor--editing input {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.link-editor__icon {
+  font-size: 1.1rem;
+}
+
+.link-editor__label {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.link-editor__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.link-editor__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
