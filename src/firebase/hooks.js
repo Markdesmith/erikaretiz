@@ -3,7 +3,7 @@ import {
   collection, doc, onSnapshot, query, orderBy, setDoc, deleteDoc, updateDoc, writeBatch,
 } from 'firebase/firestore';
 import {
-  signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+  signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged,
 } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, auth, storage } from './config';
@@ -21,8 +21,22 @@ export function useAuth() {
     return unsub;
   }, []);
 
+  useEffect(() => {
+    getRedirectResult(auth).catch(() => {});
+  }, []);
+
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
-  const loginWithGoogle = () => signInWithPopup(auth, new GoogleAuthProvider());
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      return await signInWithPopup(auth, provider);
+    } catch (err) {
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+        return signInWithRedirect(auth, provider);
+      }
+      throw err;
+    }
+  };
   const logout = () => signOut(auth);
 
   return { user, loading, login, loginWithGoogle, logout };

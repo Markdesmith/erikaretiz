@@ -22,7 +22,12 @@ export default function AdminLogin() {
       await loginWithGoogle();
       navigate('/admin/links');
     } catch (err) {
-      setError('Google sign-in failed');
+      console.error('Google auth error:', err.code, err.message);
+      setError(err.code === 'auth/unauthorized-domain'
+        ? 'This domain is not authorized for sign-in'
+        : err.code === 'auth/popup-closed-by-user'
+        ? 'Sign-in popup was closed'
+        : `Sign-in failed: ${err.code || err.message}`);
     }
   };
 
