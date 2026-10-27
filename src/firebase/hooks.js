@@ -3,7 +3,7 @@ import {
   collection, doc, onSnapshot, query, orderBy, setDoc, deleteDoc, updateDoc, writeBatch,
 } from 'firebase/firestore';
 import {
-  signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged,
+  signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged,
 } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, auth, storage } from './config';
@@ -38,8 +38,9 @@ export function useAuth() {
     }
   };
   const logout = () => signOut(auth);
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  return { user, loading, login, loginWithGoogle, logout };
+  return { user, loading, login, loginWithGoogle, logout, resetPassword };
 }
 
 // Site config hook

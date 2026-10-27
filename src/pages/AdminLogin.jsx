@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../firebase/hooks';
 import './AdminLogin.css';
 
@@ -7,14 +7,12 @@ export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [showEmail, setShowEmail] = useState(false);
-  const { user, login, loginWithGoogle } = useAuth();
+  const { user, login, loginWithGoogle, resetPassword } = useAuth();
   const navigate = useNavigate();
 
-  if (user) {
-    navigate('/admin/links', { replace: true });
-    return null;
-  }
+  if (user) return <Navigate to="/admin/links" replace />;
 
   const handleGoogle = async () => {
     setError('');
@@ -34,11 +32,37 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setNotice('');
     try {
       await login(email, password);
       navigate('/admin/links');
     } catch (err) {
-      setError('Invalid email or password');
+      console.error('Email auth error:', err.code, err.message);
+      setError({
+        'auth/invalid-credential': 'Wrong password, or no password is set for this email. If you normally use Google, sign in with Google or use “Forgot password?” to create one.',
+        'auth/wrong-password': 'Wrong password. Use “Forgot password?” to reset it.',
+        'auth/user-not-found': 'No account with this email. Try “Sign in with Google”.',
+        'auth/invalid-email': 'That email address doesn’t look right.',
+        'auth/operation-not-allowed': 'Email sign-in is turned off in Firebase (Authentication → Sign-in method → Email/Password).',
+        'auth/too-many-requests': 'Too many attempts. Wait a few minutes or reset your password.',
+        'auth/user-disabled': 'This account has been disabled.',
+      }[err.code] || `Sign-in failed: ${err.code || err.message}`);
+    }
+  };
+
+  const handleReset = async () => {
+    setError('');
+    setNotice('');
+    if (!email) {
+      setError('Enter your email above first.');
+      return;
+    }
+    try {
+      await resetPassword(email);
+      setNotice(`If ${email} has an account, a password reset link is on its way. Check your inbox and spam.`);
+    } catch (err) {
+      console.error('Password reset error:', err.code, err.message);
+      setError(`Couldn’t send reset email: ${err.code || err.message}`);
     }
   };
 
@@ -47,6 +71,7 @@ export default function AdminLogin() {
       <form className="admin-login__form" onSubmit={handleSubmit}>
         <h1 className="admin-login__title">Admin</h1>
         {error && <p className="admin-login__error">{error}</p>}
+        {notice && <p className="admin-login__notice">{notice}</p>}
 
         <button type="button" className="admin-login__google" onClick={handleGoogle}>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -79,6 +104,7 @@ export default function AdminLogin() {
               required
             />
             <button type="submit">Sign In</button>
+            <button type="button" className="admin-login__forgot" onClick={handleReset}>Forgot password?</button>
           </>
         ) : (
           <button type="button" className="admin-login__email-toggle" onClick={() => setShowEmail(true)}>

@@ -36,6 +36,15 @@
   border-radius: var(--radius-sm);
 }
 
+.admin-login__notice {
+  color: #2e6b3a;
+  font-size: 0.9rem;
+  text-align: center;
+  background: #e8f5ea;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
 .admin-login__google {
   display: flex;
   align-items: center;
@@ -111,4 +120,18 @@
 
 .admin-login__form button[type="submit"]:hover {
   background: var(--purple-main);
+}
+
+.admin-login__form .admin-login__forgot {
+  padding: 4px;
+  background: none;
+  color: var(--purple-main);
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.admin-login__form .admin-login__forgot:hover {
+  background: none;
+  color: var(--purple-dark);
 }
