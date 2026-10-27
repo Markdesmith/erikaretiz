@@ -46,7 +46,10 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
+          trap 'rm -f "$RUNNER_TEMP/sa.json"' EXIT
           echo "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
           GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" \
-            npx --yes firebase-tools@15.34.1 deploy --only firestore:rules,storage --project erikaretiz --non-interactive
+            npx --yes firebase-tools@15.34.1 deploy --only firestore:rules --project erikaretiz --non-interactive
+          GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" \
+            npx --yes firebase-tools@15.34.1 deploy --only storage --project erikaretiz --non-interactive
           rm -f "$RUNNER_TEMP/sa.json"
