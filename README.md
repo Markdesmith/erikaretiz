@@ -11,7 +11,7 @@ npm run dev
 
 ## Deploy
 
-Every push to `main` deploys automatically through `.github/workflows/deploy.yml`: it builds the site, publishes the Firestore and Storage security rules, then publishes to Firebase Hosting. It needs the `FIREBASE_SERVICE_ACCOUNT` repository secret (a service-account JSON key from Firebase Console → Project settings → Service accounts).
+Every push to `main` deploys automatically through `.github/workflows/deploy.yml`: it builds the site, publishes the Firestore and Storage security rules, then publishes to Firebase Hosting. It needs the `FIREBASE_SERVICE_ACCOUNT` repository secret (a service-account JSON key from Firebase Console → Project settings → Service accounts). In Google Cloud IAM that service account also needs the **Service Usage Consumer** and **Firebase Admin** roles, or the deploy fails with a 403.
 
 To deploy by hand instead: `npm run build && npx firebase deploy`.
 
