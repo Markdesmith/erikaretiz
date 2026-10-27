@@ -1,14 +1,8 @@
 import { useRef, useState } from 'react';
-import { uploadPhoto } from '../../firebase/hooks';
+import { uploadBlob } from '../../firebase/hooks';
+import { prepareUpload } from '../../lib/images';
 import { DEFAULT_COVER, resolveCover, withYear } from '../shared/cover';
-
-function parsePhotos(item) {
-  try {
-    return JSON.parse(item?.content || '[]');
-  } catch {
-    return [];
-  }
-}
+import { parseGallery, visiblePhotos, newId } from '../Portfolio/gallery';
 
 function Slider({ label, value, min, max, unit = '%', onChange }) {
   return (
@@ -61,7 +55,9 @@ export default function CoverEditor({ config, items, onSave }) {
   const dragging = useRef(false);
 
   const name = config?.title || 'Erika Retiz';
-  const allPhotos = items.filter((i) => i.type === 'photos').flatMap(parsePhotos);
+  const galleryPhotos = items.filter((i) => i.type === 'photos').flatMap((i) => visiblePhotos(parseGallery(i.content)));
+  const allPhotos = galleryPhotos.map((p) => p.url);
+  const thumbFor = Object.fromEntries(galleryPhotos.map((p) => [p.url, p.thumb || p.url]));
   const photo = draft.photo || allPhotos[0];
   const dirty = JSON.stringify(draft) !== JSON.stringify(saved) || quote !== (config?.actingQuote || '');
 
@@ -88,7 +84,8 @@ export default function CoverEditor({ config, items, onSave }) {
     if (!file) return;
     setUploading(true);
     try {
-      set({ photo: await uploadPhoto(file) });
+      const prepared = await prepareUpload(file);
+      set({ photo: await uploadBlob(`cover/${newId('cover')}.jpg`, prepared.master) });
     } catch (err) {
       alert('Upload failed: ' + err.message);
     }
@@ -129,7 +126,7 @@ export default function CoverEditor({ config, items, onSave }) {
                   onClick={() => set({ photo: i === 0 ? '' : p })}
                   title={i === 0 ? 'First headshot (default)' : `Headshot ${i + 1}`}
                 >
-                  <img src={p} alt="" loading="lazy" />
+                  <img src={thumbFor[p]} alt="" loading="lazy" />
                 </button>
               ))}
               {draft.photo && !allPhotos.includes(draft.photo) && (

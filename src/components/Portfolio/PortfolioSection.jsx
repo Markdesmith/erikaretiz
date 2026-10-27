@@ -1,5 +1,6 @@
 import DemoReel from './DemoReel';
 import PhotoGallery from './PhotoGallery';
+import { parseGallery } from './gallery';
 import EditorialTitle from '../shared/EditorialTitle';
 import { sectionId } from './sectionId';
 
@@ -24,7 +25,7 @@ export default function PortfolioSection({ item, index }) {
       case 'video':
         return <DemoReel url={item.content} />;
       case 'photos':
-        return <PhotoGallery photos={JSON.parse(item.content || '[]')} />;
+        return <PhotoGallery gallery={parseGallery(item.content)} />;
       case 'text':
         return <div className="portfolio-text" dangerouslySetInnerHTML={{ __html: item.content }} />;
       default:

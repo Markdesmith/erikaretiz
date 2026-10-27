@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { usePortfolio, useSiteConfig } from '../firebase/hooks';
 import PortfolioSection from '../components/Portfolio/PortfolioSection';
 import { sectionId } from '../components/Portfolio/sectionId';
+import { parseGallery, visiblePhotos } from '../components/Portfolio/gallery';
 import EditorialTitle from '../components/shared/EditorialTitle';
 import { resolveCover, coverVars, withYear } from '../components/shared/cover';
 import Loading from '../components/shared/Loading';
@@ -13,14 +14,6 @@ const COVER_LINES = {
   photos: 'The headshot portfolio, in light & shadow',
   contact: 'Casting & bookings, inside',
 };
-
-function parsePhotos(item) {
-  try {
-    return JSON.parse(item?.content || '[]');
-  } catch {
-    return [];
-  }
-}
 
 export default function Actress() {
   const { config } = useSiteConfig();
@@ -41,7 +34,8 @@ export default function Actress() {
   const reel = visible.find((item) => item.type === 'video');
   const contact = visible.find((item) => item.type === 'contact');
   const cover = resolveCover(config);
-  const coverPhoto = cover.photo || parsePhotos(visible.find((item) => item.type === 'photos'))[0];
+  const firstGallery = visible.find((item) => item.type === 'photos');
+  const coverPhoto = cover.photo || (firstGallery && visiblePhotos(parseGallery(firstGallery.content))[0]?.url);
   const coverLines = cover.showCoverLines ? visible.filter((item) => item.sectionName).slice(0, 4) : [];
 
   return (

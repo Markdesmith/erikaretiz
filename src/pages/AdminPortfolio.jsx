@@ -4,6 +4,7 @@ import { usePortfolio, useSiteConfig } from '../firebase/hooks';
 import AdminNav from '../components/Admin/AdminNav';
 import PortfolioItemEditor from '../components/Admin/PortfolioItemEditor';
 import CoverEditor from '../components/Admin/CoverEditor';
+import { resolveCover } from '../components/shared/cover';
 import SortableItem from '../components/Admin/SortableItem';
 import Loading from '../components/shared/Loading';
 import './AdminPortfolio.css';
@@ -39,7 +40,7 @@ export default function AdminPortfolio() {
       <div className="admin-page__content">
         <h1 className="admin-page__title">Actor Portfolio</h1>
 
-        <CoverEditor config={config} items={items} onSave={updateConfig} />
+        <CoverEditor key={JSON.stringify(config?.cover || {})} config={config} items={items} onSave={updateConfig} />
 
         <h2 className="admin-page__subtitle">Sections</h2>
 
@@ -50,6 +51,7 @@ export default function AdminPortfolio() {
                 {({ dragHandleProps }) => (
                   <PortfolioItemEditor
                     item={item}
+                    onUseAsCover={(url) => updateConfig({ cover: { ...resolveCover(config), photo: url } })}
                     onUpdate={(data) => updateItem(item.id, data)}
                     onDelete={() => deleteItem(item.id)}
                     dragHandleProps={dragHandleProps}

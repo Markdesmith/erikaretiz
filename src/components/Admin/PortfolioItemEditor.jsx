@@ -1,38 +1,17 @@
 import { useState } from 'react';
-import { uploadPhoto } from '../../firebase/hooks';
+import GalleryManager from './GalleryManager';
 
-export default function PortfolioItemEditor({ item, onUpdate, onDelete, dragHandleProps }) {
-  const [editing, setEditing] = useState(false);
+export default function PortfolioItemEditor({ item, onUpdate, onDelete, onUseAsCover, dragHandleProps }) {
+  const [editing, setEditing] = useState(item.type === 'photos');
   const [form, setForm] = useState(item);
-  const [uploading, setUploading] = useState(false);
 
+  const isGallery = form.type === 'photos' && item.type === 'photos';
+
+  // Galleries save themselves as you work, so never overwrite their content from this form.
   const save = () => {
-    onUpdate(form);
-    setEditing(false);
-  };
-
-  const handlePhotoUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-    setUploading(true);
-    try {
-      const currentPhotos = JSON.parse(form.content || '[]');
-      const urls = await Promise.all(files.map((f) => uploadPhoto(f)));
-      const updated = { ...form, content: JSON.stringify([...currentPhotos, ...urls]) };
-      setForm(updated);
-      onUpdate(updated);
-    } catch (err) {
-      alert('Upload failed: ' + err.message);
-    }
-    setUploading(false);
-  };
-
-  const removePhoto = (index) => {
-    const photos = JSON.parse(form.content || '[]');
-    photos.splice(index, 1);
-    const updated = { ...form, content: JSON.stringify(photos) };
-    setForm(updated);
-    onUpdate(updated);
+    const fields = { sectionName: form.sectionName, type: form.type };
+    onUpdate(isGallery ? fields : { ...fields, content: form.content });
+    if (!isGallery) setEditing(false);
   };
 
   return (
@@ -73,21 +52,12 @@ export default function PortfolioItemEditor({ item, onUpdate, onDelete, dragHand
             <option value="text">Text/HTML</option>
           </select>
 
+          {isGallery && (form.sectionName !== item.sectionName) && (
+            <button className="btn btn--save" onClick={save}>Save name</button>
+          )}
+
           {form.type === 'photos' ? (
-            <div className="portfolio-editor__photos">
-              <div className="portfolio-editor__photo-grid">
-                {JSON.parse(form.content || '[]').map((url, i) => (
-                  <div key={i} className="portfolio-editor__photo-thumb">
-                    <img src={url} alt="" />
-                    <button onClick={() => removePhoto(i)}>×</button>
-                  </div>
-                ))}
-              </div>
-              <label className="btn btn--add">
-                {uploading ? 'Uploading...' : '+ Upload Photos'}
-                <input type="file" multiple accept="image/*" onChange={handlePhotoUpload} hidden />
-              </label>
-            </div>
+            <GalleryManager item={item} onUpdate={onUpdate} onUseAsCover={onUseAsCover} />
           ) : form.type === 'text' ? (
             <>
               <label>Content (HTML supported)</label>
@@ -107,7 +77,7 @@ export default function PortfolioItemEditor({ item, onUpdate, onDelete, dragHand
             </>
           )}
 
-          <button className="btn btn--save" onClick={save}>Save Changes</button>
+          {!isGallery && <button className="btn btn--save" onClick={save}>Save Changes</button>}
         </div>
       )}
     </div>

@@ -53,3 +53,13 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" \
             npx --yes firebase-tools@15.34.1 deploy --only storage --project erikaretiz --non-interactive
           rm -f "$RUNNER_TEMP/sa.json"
+
+      # Lets the admin photo editor read stored images into a canvas.
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Allow the site to read photos from Storage (CORS)
+        run: gcloud storage buckets update gs://erikaretiz.firebasestorage.app --cors-file=storage.cors.json

@@ -23,3 +23,7 @@ Only these accounts can edit, and their email must be verified:
 - actress_erikaretiz@outlook.com (email + password; use "Forgot password?" to set one)
 
 To add someone, update the list in all three places: `src/firebase/admins.js`, `firestore.rules`, `storage.rules`.
+
+## Photo galleries
+
+Galleries are stored as JSON in a portfolio item's `content` (see `src/components/Portfolio/gallery.js`; older plain URL arrays are upgraded on read). Uploads are resized in the browser to a 2400px master plus a 640px thumbnail. Edits (crop, rotate, filters) are rendered in the browser and saved as new files, keeping the original so edits can be reverted. The editor reads stored images into a canvas, which needs the bucket CORS settings in `storage.cors.json`; the deploy workflow applies them.

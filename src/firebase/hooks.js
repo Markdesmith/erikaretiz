@@ -130,13 +130,14 @@ export function usePortfolio() {
 }
 
 // Photo upload helper
-export async function uploadPhoto(file) {
-  const storageRef = ref(storage, `photos/${Date.now()}-${file.name}`);
-  await uploadBytes(storageRef, file);
+export async function uploadBlob(path, blob) {
+  const storageRef = ref(storage, path);
+  await uploadBytes(storageRef, blob, { contentType: blob.type || 'image/jpeg', cacheControl: 'public, max-age=31536000' });
   return getDownloadURL(storageRef);
 }
 
-export async function deletePhoto(url) {
-  const storageRef = ref(storage, url);
-  return deleteObject(storageRef);
+// Best-effort removal of files we uploaded; bundled /assets images and missing files are ignored.
+export async function deleteFiles(urls) {
+  const ours = [...new Set(urls)].filter((u) => u && u.includes('firebasestorage'));
+  await Promise.all(ours.map((u) => deleteObject(ref(storage, u)).catch(() => {})));
 }
