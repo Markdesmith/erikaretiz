@@ -32,7 +32,7 @@ export default function AdminLogin() {
     } catch (err) {
       console.error('Google auth error:', err.code, err.message);
       setError(err.code === 'auth/unauthorized-domain'
-        ? 'This domain is not authorized for sign-in'
+        ? `${window.location.hostname} isn’t allowed to sign in yet. Add it in Firebase Console → Authentication → Settings → Authorized domains.`
         : err.code === 'auth/popup-closed-by-user'
         ? 'Sign-in popup was closed'
         : `Sign-in failed: ${err.code || err.message}`);
