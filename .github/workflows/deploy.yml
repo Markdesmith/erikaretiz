@@ -35,6 +35,13 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: erikaretiz
+          channelId: live
+
       - name: Deploy Firestore and Storage security rules
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -43,10 +50,3 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" \
             npx --yes firebase-tools@15.34.1 deploy --only firestore:rules,storage --project erikaretiz --non-interactive
           rm -f "$RUNNER_TEMP/sa.json"
-
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: erikaretiz
-          channelId: live
