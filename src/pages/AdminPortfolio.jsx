@@ -1,16 +1,18 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { usePortfolio } from '../firebase/hooks';
+import { usePortfolio, useSiteConfig } from '../firebase/hooks';
 import AdminNav from '../components/Admin/AdminNav';
 import PortfolioItemEditor from '../components/Admin/PortfolioItemEditor';
+import CoverEditor from '../components/Admin/CoverEditor';
 import SortableItem from '../components/Admin/SortableItem';
 import Loading from '../components/shared/Loading';
 import './AdminPortfolio.css';
 
 export default function AdminPortfolio() {
   const { items, loading, addItem, updateItem, deleteItem, reorderItems } = usePortfolio();
+  const { config, loading: configLoading, updateConfig } = useSiteConfig();
 
-  if (loading) return <Loading />;
+  if (loading || configLoading) return <Loading />;
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -36,6 +38,10 @@ export default function AdminPortfolio() {
       <AdminNav />
       <div className="admin-page__content">
         <h1 className="admin-page__title">Actor Portfolio</h1>
+
+        <CoverEditor config={config} items={items} onSave={updateConfig} />
+
+        <h2 className="admin-page__subtitle">Sections</h2>
 
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>

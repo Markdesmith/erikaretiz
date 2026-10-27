@@ -4,6 +4,7 @@ import { usePortfolio, useSiteConfig } from '../firebase/hooks';
 import PortfolioSection from '../components/Portfolio/PortfolioSection';
 import { sectionId } from '../components/Portfolio/sectionId';
 import EditorialTitle from '../components/shared/EditorialTitle';
+import { resolveCover, coverVars, withYear } from '../components/shared/cover';
 import Loading from '../components/shared/Loading';
 import './Actress.css';
 
@@ -39,8 +40,9 @@ export default function Actress() {
   const visible = items.filter((item) => item.visible);
   const reel = visible.find((item) => item.type === 'video');
   const contact = visible.find((item) => item.type === 'contact');
-  const coverPhoto = parsePhotos(visible.find((item) => item.type === 'photos'))[0];
-  const coverLines = visible.filter((item) => item.sectionName).slice(0, 4);
+  const cover = resolveCover(config);
+  const coverPhoto = cover.photo || parsePhotos(visible.find((item) => item.type === 'photos'))[0];
+  const coverLines = cover.showCoverLines ? visible.filter((item) => item.sectionName).slice(0, 4) : [];
 
   return (
     <div className="actress">
@@ -56,13 +58,13 @@ export default function Actress() {
         </div>
       </nav>
 
-      <header className="cover">
+      <header className="cover" style={coverVars(cover)}>
         {coverPhoto && <img className="cover__photo" src={coverPhoto} alt={`${name} portrait`} />}
         <div className="cover__meta eyebrow">
-          <span>Actor Portfolio</span>
-          <span>Vol. 01 — {new Date().getFullYear()}</span>
+          <span>{withYear(cover.kickerLeft)}</span>
+          <span>{withYear(cover.kickerRight)}</span>
         </div>
-        <h1 className="cover__masthead fade-in-up">{name}</h1>
+        <h1 className="cover__masthead fade-in-up">{cover.masthead || name}</h1>
 
         {coverLines.length > 0 && (
           <ul className="cover__lines fade-in-up" style={{ animationDelay: '0.2s' }}>

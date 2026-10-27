@@ -14,7 +14,6 @@ export default function AdminLinks() {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [tagline, setTagline] = useState('');
-  const [actingQuote, setActingQuote] = useState('');
   const [configEditing, setConfigEditing] = useState(false);
 
   if (configLoading || sectionsLoading) return <Loading />;
@@ -23,12 +22,11 @@ export default function AdminLinks() {
     setTitle(config?.title || '');
     setSubtitle(config?.subtitle || '');
     setTagline(config?.tagline || '');
-    setActingQuote(config?.actingQuote || '');
     setConfigEditing(true);
   };
 
   const saveConfig = async () => {
-    await updateConfig({ title, subtitle, tagline, actingQuote });
+    await updateConfig({ title, subtitle, tagline });
     setConfigEditing(false);
   };
 
@@ -59,8 +57,6 @@ export default function AdminLinks() {
               <input value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
               <label>Tagline</label>
               <input value={tagline} onChange={(e) => setTagline(e.target.value)} />
-              <label>Actor Page Cover Quote (optional)</label>
-              <input value={actingQuote} onChange={(e) => setActingQuote(e.target.value)} />
               <div className="admin-card__actions">
                 <button className="btn btn--save" onClick={saveConfig}>Save</button>
                 <button className="btn btn--cancel" onClick={() => setConfigEditing(false)}>Cancel</button>
@@ -71,7 +67,6 @@ export default function AdminLinks() {
               <p><strong>Title:</strong> {config?.title}</p>
               <p><strong>Subtitle:</strong> {config?.subtitle}</p>
               <p><strong>Tagline:</strong> {config?.tagline}</p>
-              <p><strong>Actor Page Cover Quote:</strong> {config?.actingQuote}</p>
               <button className="btn" onClick={startEditConfig}>Edit</button>
             </div>
           )}
