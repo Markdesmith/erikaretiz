@@ -30,6 +30,7 @@ export default function PhotoGallery({ photos }) {
         {photos.map((photo, i) => (
           <button key={i} type="button" className="photo-gallery__item" onClick={() => setSelected(i)}>
             <img src={photo} alt={`Portfolio ${i + 1}`} loading="lazy" />
+            <span className="photo-gallery__caption">Look {String(i + 1).padStart(2, '0')}</span>
           </button>
         ))}
       </div>

@@ -13,7 +13,7 @@
   --shadow-hover: 0 8px 30px rgba(91, 74, 122, 0.2);
   --radius: 16px;
   --radius-sm: 10px;
-  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-display: 'Bodoni Moda', Didot, 'Times New Roman', serif;
   --font-body: 'Manrope', -apple-system, sans-serif;
   --ink: #1C1822;
   --ivory: #F5F2ED;
@@ -22,6 +22,8 @@
   --lilac: #B7A8D4;
   --ink-muted: #6F6779;
   --line: rgba(28, 24, 34, 0.14);
+  --noir: #0D0B0F;
+  --noir-line: rgba(243, 239, 233, 0.16);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

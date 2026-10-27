@@ -9,20 +9,18 @@ export default function Home() {
 
   if (configLoading || sectionsLoading) return <Loading />;
 
-  const [firstName, ...restName] = (config?.title || 'Erika Retiz').split(' ');
   let linkIndex = 0;
 
   return (
     <div className="home" style={{ backgroundImage: `url(${config?.bgImage || '/assets/images/bg.jpg'})` }}>
       <div className="home__overlay">
-        <div className="home__content">
-          <p className="home__subtitle eyebrow fade-in-up">
-            {config?.subtitle || 'Artist & Holistic Therapist'}
-          </p>
-          <h1 className="home__title fade-in-up" style={{ animationDelay: '0.1s' }}>
-            {firstName} {restName.length > 0 && <em>{restName.join(' ')}</em>}
-          </h1>
+        <div className="home__meta eyebrow">
+          <span>{config?.subtitle || 'Artist & Holistic Therapist'}</span>
+          <span>Vol. 01 — {new Date().getFullYear()}</span>
+        </div>
+        <h1 className="home__title fade-in-up">{config?.title || 'Erika Retiz'}</h1>
 
+        <div className="home__content">
           <div className="home__links">
             {sections.map((section, si) => {
               const visibleLinks = section.links?.filter(Boolean) || [];
