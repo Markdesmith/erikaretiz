@@ -17,7 +17,12 @@ export default function LinkEditor({
         <input
           value={form.label}
           onChange={(e) => setForm({ ...form, label: e.target.value })}
-          placeholder="Label"
+          placeholder="Label — put *stars* around words to show them in italics"
+        />
+        <input
+          value={form.subtitle || ''}
+          onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
+          placeholder="Small line underneath (optional), e.g. The reel & headshots"
         />
         <input
           value={form.url}
