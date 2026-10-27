@@ -16,9 +16,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check Firebase credentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::error::Add the FIREBASE_SERVICE_ACCOUNT secret (Settings > Secrets and variables > Actions) with the JSON key from Firebase Console > Project settings > Service accounts."
+            exit 1
+          fi
 
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
