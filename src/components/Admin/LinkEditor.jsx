@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
-export default function LinkEditor({ link, onSave, onDelete }) {
+export default function LinkEditor({
+  link, onSave, onDelete, dragHandleProps, isFirst, isLast, onMoveUp, onMoveDown, otherSections = [], onMoveToSection,
+}) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState(link);
 
@@ -54,10 +56,26 @@ export default function LinkEditor({ link, onSave, onDelete }) {
 
   return (
     <div className="link-editor">
+      <span className="link-editor__drag" title="Drag to reorder" {...dragHandleProps}>&#x2807;</span>
       <span className="link-editor__icon">{link.icon}</span>
       <span className="link-editor__label">{link.label}</span>
       <div className="link-editor__actions">
-        <button className="btn btn--sm" onClick={() => setEditing(true)}>Edit</button>
+        <button className="btn btn--sm" onClick={onMoveUp} disabled={isFirst} aria-label="Move up" title="Move up">↑</button>
+        <button className="btn btn--sm" onClick={onMoveDown} disabled={isLast} aria-label="Move down" title="Move down">↓</button>
+        {otherSections.length > 0 && (
+          <select
+            className="link-editor__move"
+            value=""
+            onChange={(e) => e.target.value && onMoveToSection(e.target.value)}
+            aria-label="Move to another section"
+          >
+            <option value="">Move to…</option>
+            {otherSections.map((s) => (
+              <option key={s.id} value={s.id}>{s.name?.replace(/:$/, '') || '(No heading)'}</option>
+            ))}
+          </select>
+        )}
+        <button className="btn btn--sm" onClick={() => { setForm(link); setEditing(true); }}>Edit</button>
         <button className="btn btn--sm btn--danger" onClick={onDelete}>×</button>
       </div>
     </div>

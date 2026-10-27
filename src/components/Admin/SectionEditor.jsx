@@ -1,24 +1,35 @@
 import { useState } from 'react';
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import LinkEditor from './LinkEditor';
+import SortableItem from './SortableItem';
 
-export default function SectionEditor({ section, onUpdate, onDelete, dragHandleProps }) {
+const withOrder = (links) => links.map((link, order) => ({ ...link, order }));
+
+export default function SectionEditor({ section, otherSections = [], onUpdate, onDelete, onMoveLink, dragHandleProps }) {
   const [sectionName, setSectionName] = useState(section.name || '');
   const [editingName, setEditingName] = useState(false);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
-  const updateLink = (index, updatedLink) => {
-    const links = [...(section.links || [])];
-    links[index] = updatedLink;
-    onUpdate({ links });
-  };
+  const links = [...(section.links || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const ids = links.map((_, i) => `${section.id}-${i}`);
+  const saveLinks = (next) => onUpdate({ links: withOrder(next) });
 
+  const updateLink = (index, updatedLink) => saveLinks(links.map((l, i) => (i === index ? updatedLink : l)));
   const deleteLink = (index) => {
-    const links = (section.links || []).filter((_, i) => i !== index);
-    onUpdate({ links });
+    if (window.confirm(`Delete “${links[index].label}”?`)) saveLinks(links.filter((_, i) => i !== index));
   };
+  const moveLink = (from, to) => {
+    if (to < 0 || to >= links.length) return;
+    saveLinks(arrayMove(links, from, to));
+  };
+  const addLink = () => saveLinks([...links, { label: 'New Link', url: '#', icon: '' }]);
 
-  const addLink = () => {
-    const links = [...(section.links || []), { label: 'New Link', url: '#', icon: '', order: section.links?.length || 0 }];
-    onUpdate({ links });
+  const handleDragEnd = ({ active, over }) => {
+    if (over && active.id !== over.id) moveLink(ids.indexOf(active.id), ids.indexOf(over.id));
   };
 
   const saveName = () => {
@@ -29,7 +40,7 @@ export default function SectionEditor({ section, onUpdate, onDelete, dragHandleP
   return (
     <div className="section-editor">
       <div className="section-editor__header">
-        <span className="section-editor__drag" {...dragHandleProps}>&#x2807;</span>
+        <span className="section-editor__drag" title="Drag to move this section" {...dragHandleProps}>&#x2807;</span>
         {editingName ? (
           <div className="section-editor__name-edit">
             <input
@@ -47,18 +58,30 @@ export default function SectionEditor({ section, onUpdate, onDelete, dragHandleP
         <button className="btn btn--sm btn--danger" onClick={onDelete}>Delete Section</button>
       </div>
 
-      <div className="section-editor__links">
-        {(section.links || [])
-          .sort((a, b) => a.order - b.order)
-          .map((link, i) => (
-            <LinkEditor
-              key={i}
-              link={link}
-              onSave={(updated) => updateLink(i, updated)}
-              onDelete={() => deleteLink(i)}
-            />
-          ))}
-      </div>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+          <div className="section-editor__links">
+            {links.map((link, i) => (
+              <SortableItem key={ids[i]} id={ids[i]}>
+                {({ dragHandleProps: linkHandleProps }) => (
+                  <LinkEditor
+                    link={link}
+                    dragHandleProps={linkHandleProps}
+                    isFirst={i === 0}
+                    isLast={i === links.length - 1}
+                    onMoveUp={() => moveLink(i, i - 1)}
+                    onMoveDown={() => moveLink(i, i + 1)}
+                    otherSections={otherSections}
+                    onMoveToSection={(targetId) => onMoveLink(i, targetId)}
+                    onSave={(updated) => updateLink(i, updated)}
+                    onDelete={() => deleteLink(i)}
+                  />
+                )}
+              </SortableItem>
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       <button className="btn btn--add" onClick={addLink}>+ Add Link</button>
     </div>

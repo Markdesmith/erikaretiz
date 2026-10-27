@@ -30,6 +30,18 @@ export default function AdminLinks() {
     setConfigEditing(false);
   };
 
+  const byOrder = (links) => [...(links || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+  const moveLinkToSection = async (fromSection, index, targetId) => {
+    const target = sections.find((s) => s.id === targetId);
+    if (!target) return;
+    const fromLinks = byOrder(fromSection.links);
+    const [link] = fromLinks.splice(index, 1);
+    const toLinks = [...byOrder(target.links), link];
+    await updateSection(target.id, { links: toLinks.map((l, order) => ({ ...l, order })) });
+    await updateSection(fromSection.id, { links: fromLinks.map((l, order) => ({ ...l, order })) });
+  };
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
@@ -80,6 +92,8 @@ export default function AdminLinks() {
                 {({ dragHandleProps }) => (
                   <SectionEditor
                     section={section}
+                    otherSections={sections.filter((s) => s.id !== section.id)}
+                    onMoveLink={(index, targetId) => moveLinkToSection(section, index, targetId)}
                     onUpdate={(data) => updateSection(section.id, data)}
                     onDelete={() => {
                       if (window.confirm('Delete this section and all its links?')) {
