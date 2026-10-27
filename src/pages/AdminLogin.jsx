@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../firebase/hooks';
+import { isAdmin } from '../firebase/admins';
 import './AdminLogin.css';
 
 export default function AdminLogin() {
@@ -9,10 +10,19 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [showEmail, setShowEmail] = useState(false);
-  const { user, login, loginWithGoogle, resetPassword } = useAuth();
+  const { user, login, loginWithGoogle, logout, resetPassword } = useAuth();
   const navigate = useNavigate();
 
-  if (user) return <Navigate to="/admin/links" replace />;
+  if (isAdmin(user)) return <Navigate to="/admin/links" replace />;
+
+  const notAllowed = user && (
+    <p className="admin-login__error">
+      {user.emailVerified
+        ? `${user.email} doesn’t have admin access.`
+        : `Please verify ${user.email} first (use “Forgot password?” to get an email link).`}{' '}
+      <button type="button" className="admin-login__forgot" onClick={logout}>Sign out</button>
+    </p>
+  );
 
   const handleGoogle = async () => {
     setError('');
@@ -70,6 +80,7 @@ export default function AdminLogin() {
     <div className="admin-login">
       <form className="admin-login__form" onSubmit={handleSubmit}>
         <h1 className="admin-login__title">Admin</h1>
+        {notAllowed}
         {error && <p className="admin-login__error">{error}</p>}
         {notice && <p className="admin-login__notice">{notice}</p>}
 
