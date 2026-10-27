@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { visiblePhotos, thumbOf } from './gallery';
+import { visiblePhotos, thumbOf, creditsOf } from './gallery';
 
 // Editorial layout: photos are laid out in groups whose widths always fill the
 // 12-column grid exactly (two rows per group), so there are never gaps.
@@ -113,6 +113,9 @@ export default function PhotoGallery({ gallery }) {
               width={photo.width || undefined}
               height={photo.height || undefined}
             />
+            {settings.captions && creditsOf(photo, settings)[0] && (
+              <span className="photo-gallery__credit" aria-hidden="true">{creditsOf(photo, settings)[0][1]}</span>
+            )}
             <span className="photo-gallery__caption">
               {settings.captions && photo.caption ? photo.caption : `Look ${String(i + 1).padStart(2, '0')}`}
             </span>
@@ -124,7 +127,18 @@ export default function PhotoGallery({ gallery }) {
         <div className="photo-lightbox" role="dialog" aria-modal="true" onClick={close}>
           <figure className="photo-lightbox__figure" onClick={(e) => e.stopPropagation()}>
             <img src={current.url} alt={current.alt || ''} />
-            {settings.captions && current.caption && <figcaption>{current.caption}</figcaption>}
+            {settings.captions && (current.caption || creditsOf(current, settings).length > 0) && (
+              <figcaption>
+                {current.caption && <span className="photo-lightbox__caption">{current.caption}</span>}
+                {creditsOf(current, settings).length > 0 && (
+                  <span className="photo-lightbox__credits">
+                    {creditsOf(current, settings).map(([role, name]) => (
+                      <span key={role}>{role} <b>{name}</b></span>
+                    ))}
+                  </span>
+                )}
+              </figcaption>
+            )}
           </figure>
           <button type="button" className="photo-lightbox__close" onClick={close} aria-label="Close">×</button>
           {count > 1 && (

@@ -85,6 +85,20 @@
   font-weight: 400;
 }
 
+.gallery-manager__settings input:not([type='checkbox']) {
+  max-width: 340px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.gallery-manager__settings small {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
 .gallery-manager__settings .gallery-manager__check {
   flex-direction: row;
   align-items: center;

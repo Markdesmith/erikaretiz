@@ -14,6 +14,7 @@ export const DEFAULT_COVER = {
   kickerLeft: 'Actor Portfolio',
   kickerRight: 'Vol. 01 — {year}',
   showCoverLines: true,
+  credit: '', // e.g. photographer, shown small along the edge
 };
 
 export function resolveCover(config) {

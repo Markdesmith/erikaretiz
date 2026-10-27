@@ -226,7 +226,17 @@ export default function GalleryManager({ item, onUpdate, onUseAsCover }) {
           <label className="gallery-manager__check">
             <input type="checkbox" checked={gallery.settings.captions}
               onChange={(e) => update((g) => ({ ...g, settings: { ...g.settings, captions: e.target.checked } }))} />
-            Show captions
+            Show captions &amp; photo credits
+          </label>
+          <label>Default photographer <small>(used when a photo has no credit of its own)</small>
+            <input
+              defaultValue={gallery.settings.photographer}
+              placeholder="e.g. Jane Doe"
+              onBlur={(e) => {
+                const photographer = e.target.value.trim();
+                if (photographer !== gallery.settings.photographer) update((g) => ({ ...g, settings: { ...g.settings, photographer } }));
+              }}
+            />
           </label>
         </div>
       )}
@@ -307,6 +317,7 @@ export default function GalleryManager({ item, onUpdate, onUseAsCover }) {
           key={editingPhoto.id}
           photo={editingPhoto}
           categories={gallery.categories}
+          defaultPhotographer={gallery.settings.photographer}
           galleryPath={galleryPath}
           onClose={() => setEditingId(null)}
           onSave={(updated) => update((g) => ({ ...g, photos: g.photos.map((p) => (p.id === updated.id ? updated : p)) }))}

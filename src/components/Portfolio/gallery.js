@@ -1,7 +1,7 @@
 // Photo gallery data stored as JSON in a portfolio item's `content`.
 // Older galleries were a plain array of image URLs; parseGallery upgrades them on read.
 
-export const DEFAULT_SETTINGS = { layout: 'editorial', bwHover: true, captions: true };
+export const DEFAULT_SETTINGS = { layout: 'editorial', bwHover: true, captions: true, photographer: '' };
 
 function stableId(url) {
   let h = 0;
@@ -24,6 +24,9 @@ function toPhoto(p) {
     edit: p.edit || null,
     caption: p.caption || '',
     alt: p.alt || '',
+    photographer: p.photographer || '',
+    styling: p.styling || '',
+    hairMakeup: p.hairMakeup || '',
     categories: p.categories || [],
     featured: Boolean(p.featured),
     hidden: Boolean(p.hidden),
@@ -53,3 +56,13 @@ export const serializeGallery = (gallery) => JSON.stringify({ ...gallery, versio
 export const visiblePhotos = (gallery) => gallery.photos.filter((p) => !p.hidden && p.url);
 
 export const thumbOf = (photo) => photo.thumb || photo.url;
+
+// Magazine-style credit lines for a photo, falling back to the gallery's default photographer.
+export function creditsOf(photo, settings) {
+  const photographer = photo.photographer || settings?.photographer || '';
+  return [
+    photographer && ['Photographed by', photographer],
+    photo.styling && ['Styling', photo.styling],
+    photo.hairMakeup && ['Hair & makeup', photo.hairMakeup],
+  ].filter(Boolean);
+}

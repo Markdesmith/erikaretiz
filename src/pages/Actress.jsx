@@ -52,8 +52,9 @@ export default function Actress() {
         </div>
       </nav>
 
-      <header className="cover" style={coverVars(cover)}>
+      <header id="cover" className="cover" style={coverVars(cover)}>
         {coverPhoto && <img className="cover__photo" src={coverPhoto} alt={`${name} portrait`} />}
+        {cover.credit && <p className="cover__credit">{cover.credit}</p>}
         <div className="cover__meta eyebrow">
           <span>{withYear(cover.kickerLeft)}</span>
           <span>{withYear(cover.kickerRight)}</span>
@@ -93,7 +94,12 @@ export default function Actress() {
 
       <main>
         {visible.map((item, i) => (
-          <PortfolioSection key={item.id} item={item} index={i + 1} />
+          <PortfolioSection
+            key={item.id}
+            item={item}
+            index={i + 1}
+            next={visible[i + 1] ? { id: sectionId(visible[i + 1]), name: visible[i + 1].sectionName, index: i + 2 } : null}
+          />
         ))}
       </main>
 

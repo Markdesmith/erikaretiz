@@ -190,6 +190,8 @@ export default function CoverEditor({ config, items, onSave }) {
             <input value={draft.kickerLeft} onChange={(e) => set({ kickerLeft: e.target.value })} />
             <label>Top right <small>({'{year}'} = current year)</small></label>
             <input value={draft.kickerRight} onChange={(e) => set({ kickerRight: e.target.value })} />
+            <label>Photo credit <small>(optional, shown small along the edge)</small></label>
+            <input value={draft.credit} placeholder="e.g. Photographed by Jane Doe" onChange={(e) => set({ credit: e.target.value })} />
             <label>Quote (optional)</label>
             <input value={quote} placeholder="e.g. a line from a director or review" onChange={(e) => { setQuote(e.target.value); setStatus(''); }} />
             <label className="cover-editor__check">

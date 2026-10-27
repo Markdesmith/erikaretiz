@@ -17,10 +17,11 @@ const SLIDERS = [
   ['fade', 'Fade'],
 ];
 
-export default function PhotoEditor({ photo, categories, galleryPath, onSave, onClose, onDelete, onUseAsCover }) {
+export default function PhotoEditor({ photo, categories, defaultPhotographer, galleryPath, onSave, onClose, onDelete, onUseAsCover }) {
   const [edit, setEdit] = useState({ ...DEFAULT_EDIT, ...(photo.edit || {}) });
   const [details, setDetails] = useState({
     caption: photo.caption, alt: photo.alt, categories: photo.categories, featured: photo.featured, hidden: photo.hidden,
+    photographer: photo.photographer, styling: photo.styling, hairMakeup: photo.hairMakeup,
   });
   const [tab, setTab] = useState('crop');
   const [source, setSource] = useState(null);
@@ -255,6 +256,14 @@ export default function PhotoEditor({ photo, categories, galleryPath, onSave, on
               <label>Description <small>(for screen readers &amp; Google)</small></label>
               <input value={details.alt} placeholder="e.g. Erika Retiz in a black turtleneck"
                 onChange={(e) => setDetails({ ...details, alt: e.target.value })} />
+              <h4>Credits</h4>
+              <label>Photographer</label>
+              <input value={details.photographer} placeholder={defaultPhotographer ? `${defaultPhotographer} (gallery default)` : 'e.g. Jane Doe'}
+                onChange={(e) => setDetails({ ...details, photographer: e.target.value })} />
+              <label>Styling / wardrobe</label>
+              <input value={details.styling} onChange={(e) => setDetails({ ...details, styling: e.target.value })} />
+              <label>Hair &amp; makeup</label>
+              <input value={details.hairMakeup} onChange={(e) => setDetails({ ...details, hairMakeup: e.target.value })} />
               {categories.length > 0 && (
                 <>
                   <label>Categories</label>
