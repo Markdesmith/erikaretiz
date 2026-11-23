@@ -6,7 +6,6 @@ export async function seedDatabase() {
   await setDoc(doc(db, 'siteConfig', 'main'), {
     title: 'Erika Retiz',
     subtitle: 'Artist & Holistic Therapist',
-    tagline: 'In Service, Love and Gratitude',
     bgImage: '/assets/images/bg.jpg',
   });
 
